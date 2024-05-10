@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "commands": "tsx watch src/deploy-commands.ts",
+    "commands": "tsx src/deploy-commands.ts",
     "start": "node dist/index.js",
     "build": "tsup src/index.ts --minify",
     "lint": "npx eslint ."
