@@ -4,9 +4,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "commands": "tsx watch src/deploy-commands.ts",
-    "start": "node dist/index.js",
-    "build": "tsup src/index.ts --minify",
+    "commands": "tsx src/deploy-commands.ts",
+    "start": "ts-node src/index.ts",
+    "build": "tsc --build",
+    "start-prod": "node dist/index.js",
+    "prod": "npm run build && npm run start-prod",
     "lint": "npx eslint ."
   },
   "keywords": [],
@@ -14,6 +16,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "axios": "^1.6.8",
     "discord.js": "^14.15.2",
     "dotenv": "^16.4.5"
   },

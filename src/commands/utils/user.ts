@@ -1,10 +1,14 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder } from 'discord.js';
 
 export default {
   data: new SlashCommandBuilder()
-    .setName("user")
-    .setDescription("Provides information about the user who called a slash command."),
+    .setName('user')
+    .setDescription(
+      'Provides information about the user who called a slash command.',
+    ),
   async execute(interaction: any) {
-    await interaction.reply(`This command was run by ${interaction.user.username}, who joined on ${interaction.member.joinedAt}.`)
-  }
-}
+    await interaction.reply(
+      `This command was run by ${interaction.user.username}, who joined on ${interaction.member.joinedAt}.`,
+    );
+  },
+};
