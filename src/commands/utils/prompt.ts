@@ -24,9 +24,7 @@ export default {
           return count * Number(config.TIME_TO_REPLY);
         },
         retryCondition: (error) => {
-          return (
-            error.response?.status === 503 || error.response?.status === 524
-          );
+          return Number(error.response?.status).toString().startsWith('5');
         },
       });
       const answer = await axios.post(
