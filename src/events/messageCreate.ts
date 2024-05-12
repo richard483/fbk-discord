@@ -2,6 +2,7 @@ import { Events } from 'discord.js';
 import { config } from '../config';
 import helper from '../util/helper';
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 
 export default {
   name: Events.MessageCreate,
@@ -16,6 +17,18 @@ export default {
     q = q.replace(/<[^>]*>/g, '');
 
     try {
+      axiosRetry(axios, {
+        retries: Number(config.NUMBER_OF_API_RETRY),
+        retryDelay: (count) => {
+          console.log('[RETRY API CALL] Retry attempt: ', count);
+          return count * Number(config.TIME_TO_REPLY);
+        },
+        retryCondition: (error) => {
+          return (
+            error.response?.status === 503 || error.response?.status === 524
+          );
+        },
+      });
       const answer = await axios.post(String(config.API_HOST + 'gemini/chat'), {
         text: q,
       });
