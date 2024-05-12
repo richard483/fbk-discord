@@ -12,7 +12,6 @@ export default {
       !interaction.mentions?.users.has(config.DISCORD_CLIENT_ID)
     )
       return;
-    console.log(interaction);
     var q = interaction.content?.replace('beb, ', '');
     q = q.replace(/<[^>]*>/g, '');
 
