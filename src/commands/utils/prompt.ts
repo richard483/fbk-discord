@@ -14,7 +14,6 @@ export default {
         .setRequired(true);
     }),
   async execute(interaction: ChatInputCommandInteraction) {
-    console.log('class is: ', interaction.constructor.name);
     await interaction.deferReply();
     const question = interaction.options.getString('question');
     try {
