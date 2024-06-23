@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import axios from 'axios';
 import { config } from '../../config';
 import axiosRetry from 'axios-retry';
@@ -7,7 +7,7 @@ export default {
   data: new SlashCommandBuilder()
     .setName('reset')
     .setDescription('Reset all chat session'),
-  async execute(interaction: any) {
+  async execute(interaction: ChatInputCommandInteraction) {
     await interaction.deferReply();
     try {
       axiosRetry(axios, {

@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, Client, Events } from 'discord.js';
+import { ChatInputCommandInteraction, Events } from 'discord.js';
 import FbkClient from '../util/fbk-client';
 
 export default {

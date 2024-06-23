@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import axios from 'axios';
 import { config } from '../../config';
 import axiosRetry from 'axios-retry';
@@ -13,7 +13,7 @@ export default {
         .setDescription('Your question')
         .setRequired(true);
     }),
-  async execute(interaction: any) {
+  async execute(interaction: ChatInputCommandInteraction) {
     await interaction.deferReply();
     const question = interaction.options.getString('question');
     try {

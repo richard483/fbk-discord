@@ -1,4 +1,4 @@
-import { Client, ClientOptions, Collection, Events } from 'discord.js';
+import { Client, ClientOptions, Collection } from 'discord.js';
 import { join } from 'path';
 import { readdirSync } from 'fs';
 
@@ -42,6 +42,7 @@ export default class FbkClient extends Client {
 
     for (const file of eventFiles) {
       const filePath = join(eventsPath, file);
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const event = require(filePath).default;
       if (event.once) {
         super.once(event.name, (...args) => event.execute(...args));
