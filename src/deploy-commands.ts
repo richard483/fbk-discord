@@ -1,7 +1,11 @@
-import { REST, Routes } from 'discord.js';
+import {
+  REST,
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
+  Routes,
+} from 'discord.js';
 import { config } from './config';
 import discordCommands from './commands';
-const commands: any[] = [];
+const commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
 
 discordCommands.forEach((command) => {
   const commandInstance = command.prototype.getInstance();
