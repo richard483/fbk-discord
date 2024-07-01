@@ -2,7 +2,7 @@ export default {
   isCallingBot(text: string) {
     if (!text) return;
     const normalizedText = text.toLowerCase();
-    const panggilan = ['fubuki', 'buki', 'shirakami', 'fub'];
+    const panggilan = ['yomi'];
     return panggilan.some(
       (panggilan) =>
         normalizedText.startsWith(panggilan + ',') ||
