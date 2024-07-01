@@ -1,6 +1,6 @@
 import { GatewayIntentBits } from 'discord.js';
 import { config } from './config';
-import FbkClient from './util/fbk-client';
+import FbkClient from './util/FbkClient';
 import express from 'express';
 
 const app = express();

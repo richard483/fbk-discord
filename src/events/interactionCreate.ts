@@ -1,13 +1,14 @@
 import { ChatInputCommandInteraction, Events } from 'discord.js';
-import FbkClient from '../util/fbk-client';
+import FbkClient from '../util/FbkClient';
+import { DiscordCommand } from '../commands/DiscordCommand.interface';
 
 export default {
   name: Events.InteractionCreate,
   async execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.isChatInputCommand()) return;
-    const command = (interaction.client as FbkClient).commands.get(
-      interaction.commandName,
-    );
+    const command: DiscordCommand = (
+      interaction.client as FbkClient
+    ).commands.get(interaction.commandName);
 
     if (!command) {
       console.error(

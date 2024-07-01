@@ -1,19 +1,37 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import {
+  ChatInputCommandInteraction,
+  SlashCommandBuilder,
+  SlashCommandOptionsOnlyBuilder,
+} from 'discord.js';
 import axios from 'axios';
 import { config } from '../../config';
 import axiosRetry from 'axios-retry';
+import { DiscordCommand } from '../DiscordCommand.interface';
 
-export default {
-  data: new SlashCommandBuilder()
-    .setName('prompt')
-    .setDescription('Replies your question with GeminiPro basic model')
-    .addStringOption((option) => {
-      return option
-        .setName('question')
-        .setDescription('Your question')
-        .setRequired(true);
-    }),
-  async execute(interaction: ChatInputCommandInteraction) {
+export class PromptCommand implements DiscordCommand {
+  public data: SlashCommandOptionsOnlyBuilder;
+  private self: PromptCommand | undefined;
+
+  constructor() {
+    this.data = new SlashCommandBuilder()
+      .setName('prompt')
+      .setDescription('Replies your question with GeminiPro basic model')
+      .addStringOption((option) => {
+        return option
+          .setName('question')
+          .setDescription('Your question')
+          .setRequired(true);
+      });
+  }
+
+  public getInstance(): DiscordCommand {
+    if (!this.self) {
+      this.self = new PromptCommand();
+    }
+    return this.self;
+  }
+
+  public async execute(interaction: ChatInputCommandInteraction) {
     await interaction.deferReply();
     const question = interaction.options.getString('question');
     try {
@@ -38,5 +56,5 @@ export default {
       console.error(e);
       await interaction.editReply("There's some API error");
     }
-  },
-};
+  }
+}

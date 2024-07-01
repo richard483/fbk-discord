@@ -2,12 +2,26 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import axios from 'axios';
 import { config } from '../../config';
 import axiosRetry from 'axios-retry';
+import { DiscordCommand } from '../DiscordCommand.interface';
 
-export default {
-  data: new SlashCommandBuilder()
-    .setName('reset')
-    .setDescription('Reset all chat session'),
-  async execute(interaction: ChatInputCommandInteraction) {
+export class ResetCommand implements DiscordCommand {
+  public data: SlashCommandBuilder;
+  private self: ResetCommand | undefined;
+
+  constructor() {
+    this.data = new SlashCommandBuilder()
+      .setName('reset')
+      .setDescription('Reset all chat session');
+  }
+
+  public getInstance(): DiscordCommand {
+    if (!this.self) {
+      this.self = new ResetCommand();
+    }
+    return this.self;
+  }
+
+  public async execute(interaction: ChatInputCommandInteraction) {
     await interaction.deferReply();
     try {
       axiosRetry(axios, {
@@ -26,5 +40,5 @@ export default {
       console.error(e);
       await interaction.editReply("There's some API error");
     }
-  },
-};
+  }
+}

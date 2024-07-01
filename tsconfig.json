@@ -10,5 +10,6 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "strictNullChecks": true,
+    "experimentalDecorators": true,
   }
 }
