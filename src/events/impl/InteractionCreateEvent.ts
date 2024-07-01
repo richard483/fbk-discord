@@ -20,7 +20,7 @@ export class InteractionCreateEvent implements DiscordEvent {
 
   public async execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.isChatInputCommand()) return;
-    const command: DiscordCommand = (
+    const command: DiscordCommand | undefined = (
       interaction.client as FbkClient
     ).commands.get(interaction.commandName);
 
