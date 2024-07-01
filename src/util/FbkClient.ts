@@ -1,7 +1,6 @@
 import { Client, ClientOptions, Collection } from 'discord.js';
-import { join } from 'path';
-import { readdirSync } from 'fs';
-import discordCommands from '../commands/utils';
+import discordCommands from '../commands';
+import discordEvent from '../events';
 
 export default class FbkClient extends Client {
   commands: Collection<any, any>;
@@ -18,20 +17,17 @@ export default class FbkClient extends Client {
   }
 
   loadEvents() {
-    const eventsPath = join(__dirname, '../events');
-    const eventFiles = readdirSync(eventsPath).filter((file) =>
-      file.endsWith('.ts'),
-    );
-
-    for (const file of eventFiles) {
-      const filePath = join(eventsPath, file);
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const event = require(filePath).default;
-      if (event.once) {
-        super.once(event.name, (...args) => event.execute(...args));
+    discordEvent.forEach((event) => {
+      const eventInstance = event.prototype.getInstance();
+      if (eventInstance.once) {
+        super.once(eventInstance.name, (...args) =>
+          eventInstance.execute(...args),
+        );
       } else {
-        super.on(event.name, (...args) => event.execute(...args));
+        super.on(eventInstance.name, (...args) =>
+          eventInstance.execute(...args),
+        );
       }
-    }
+    });
   }
 }

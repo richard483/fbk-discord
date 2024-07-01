@@ -1,10 +1,24 @@
 import { ChatInputCommandInteraction, Events } from 'discord.js';
-import FbkClient from '../util/FbkClient';
-import { DiscordCommand } from '../commands/DiscordCommand.interface';
+import FbkClient from '../../util/FbkClient';
+import { DiscordCommand } from '../../commands/DiscordCommand.interface';
+import { DiscordEvent } from '../DiscordEvent.interface';
 
-export default {
-  name: Events.InteractionCreate,
-  async execute(interaction: ChatInputCommandInteraction) {
+export class InteractionCreateEvent implements DiscordEvent {
+  public name: string;
+  private self: DiscordEvent | undefined;
+
+  constructor() {
+    this.name = Events.InteractionCreate;
+  }
+
+  public getInstance(): DiscordEvent {
+    if (!this.self) {
+      this.self = new InteractionCreateEvent();
+    }
+    return this.self;
+  }
+
+  public async execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.isChatInputCommand()) return;
     const command: DiscordCommand = (
       interaction.client as FbkClient
@@ -33,5 +47,5 @@ export default {
         });
       }
     }
-  },
-};
+  }
+}

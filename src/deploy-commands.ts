@@ -1,6 +1,6 @@
 import { REST, Routes } from 'discord.js';
 import { config } from './config';
-import discordCommands from './commands/utils';
+import discordCommands from './commands';
 const commands: any[] = [];
 
 discordCommands.forEach((command) => {

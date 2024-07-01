@@ -1,12 +1,26 @@
 import { Events, Message } from 'discord.js';
-import { config } from '../config';
-import helper from '../util/helper';
+import { config } from '../../config';
+import helper from '../../util/helper';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
+import { DiscordEvent } from '../DiscordEvent.interface';
 
-export default {
-  name: Events.MessageCreate,
-  async execute(interaction: Message) {
+export class MessageCreateEvent implements DiscordEvent {
+  public name: string;
+  private self: MessageCreateEvent | undefined;
+
+  constructor() {
+    this.name = Events.MessageCreate;
+  }
+
+  public getInstance(): DiscordEvent {
+    if (!this.self) {
+      this.self = new MessageCreateEvent();
+    }
+    return this.self;
+  }
+
+  public async execute(interaction: Message) {
     if (
       interaction.mentions.repliedUser?.id != config.DISCORD_CLIENT_ID &&
       !helper.isCallingBot(interaction.content) &&
@@ -35,5 +49,5 @@ export default {
       console.error(`Error when executing axios : ${e}`);
       await interaction.react('😵');
     }
-  },
-};
+  }
+}
