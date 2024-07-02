@@ -1,5 +1,5 @@
 import { Client, Events } from 'discord.js';
-import { DiscordEvent } from '../DiscordEvent.interface';
+import { DiscordEvent } from '../discord-event';
 
 export class ReadyEvent implements DiscordEvent {
   public name: string;

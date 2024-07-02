@@ -3,7 +3,7 @@ import { config } from '../../config';
 import helper from '../../util/helper';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import { DiscordEvent } from '../DiscordEvent.interface';
+import { DiscordEvent } from '../discord-event';
 
 export class MessageCreateEvent implements DiscordEvent {
   public name: string;

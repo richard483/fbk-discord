@@ -6,7 +6,7 @@ import {
 import axios from 'axios';
 import { config } from '../../config';
 import axiosRetry from 'axios-retry';
-import { DiscordCommand } from '../DiscordCommand.interface';
+import { DiscordCommand } from '../discord-command';
 
 export class PromptCommand implements DiscordCommand {
   public data: SlashCommandOptionsOnlyBuilder;
