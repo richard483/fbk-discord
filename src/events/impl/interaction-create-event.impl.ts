@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, Events } from 'discord.js';
-import FbkClient from '../../util/FbkClient';
-import { DiscordCommand } from '../../commands/DiscordCommand.interface';
-import { DiscordEvent } from '../DiscordEvent.interface';
+import FbkClient from '../../util/fbk-client';
+import { DiscordCommand } from '../../commands/discord-command';
+import { DiscordEvent } from '../discord-event';
 
 export class InteractionCreateEvent implements DiscordEvent {
   public name: string;

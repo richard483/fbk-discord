@@ -1,9 +1,9 @@
-import { AskCommand } from './impl/AskCommand';
-import { PingCommand } from './impl/PingCommand';
-import { PromptCommand } from './impl/PromptCommand';
-import { ResetCommand } from './impl/ResetCommand';
-import { ServerCommand } from './impl/ServerCommand';
-import { UserCommand } from './impl/UserCommand';
+import { AskCommand } from './impl/ask-command.impl';
+import { PingCommand } from './impl/ping-command.impl';
+import { PromptCommand } from './impl/prompt-command.impl';
+import { ResetCommand } from './impl/reset-command.impl';
+import { ServerCommand } from './impl/server-command.impl';
+import { UserCommand } from './impl/user-command.impl';
 
 export default [
   AskCommand,
