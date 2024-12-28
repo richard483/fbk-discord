@@ -15,7 +15,7 @@ const client = new FbkClient({
 client.loadCommands();
 client.loadEvents();
 
-app.get('/', (res: any) => {
+app.get('/', (req: any, res: any) => {
   res.send('Hello from the web server!');
 });
 
