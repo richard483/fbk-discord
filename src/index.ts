@@ -19,7 +19,7 @@ app.get('/', (res: any) => {
   res.send('Hello from the web server!');
 });
 
-app.listen(8000, () => {
+app.listen(config.PORT, () => {
   console.log('Kon kon kitsune~');
 });
 
