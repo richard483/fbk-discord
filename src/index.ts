@@ -23,4 +23,4 @@ app.listen(config.PORT, () => {
   console.log('Kon kon kitsune~');
 });
 
-client.login(config.DISCORD_TOKEN);
+client.login(config.DISCORD_TOKEN).then(() => console.log('Logged in!'));
