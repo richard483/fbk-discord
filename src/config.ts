@@ -8,7 +8,7 @@ const {
   GUILD_ID,
   API_HOST,
   NUMBER_OF_API_RETRY,
-  TIME_TO_REPLY,
+  TIME_TO_RETRY,
 } = process.env;
 
 if (
@@ -17,7 +17,7 @@ if (
   !GUILD_ID ||
   !API_HOST ||
   !NUMBER_OF_API_RETRY ||
-  !TIME_TO_REPLY
+  !TIME_TO_RETRY
 ) {
   throw new Error('Missing environment variables');
 }
@@ -28,5 +28,5 @@ export const config = {
   GUILD_ID,
   API_HOST,
   NUMBER_OF_API_RETRY,
-  TIME_TO_REPLY,
+  TIME_TO_RETRY,
 };

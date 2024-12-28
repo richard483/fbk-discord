@@ -39,7 +39,7 @@ export class PromptCommand implements DiscordCommand {
         retries: Number(config.NUMBER_OF_API_RETRY),
         retryDelay: (count) => {
           console.log('[RETRY API CALL] Retry attempt: ', count);
-          return count * Number(config.TIME_TO_REPLY);
+          return count * Number(config.TIME_TO_RETRY);
         },
         retryCondition: (error) => {
           return Number(error.response?.status).toString().startsWith('5');
