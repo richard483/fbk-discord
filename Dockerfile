@@ -4,7 +4,7 @@ LABEL authors="Richard William"
 
 WORKDIR /app
 
-COPY . .
+COPY package*.json ./
 
 RUN npm install
 
