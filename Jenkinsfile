@@ -5,4 +5,5 @@ GlobalPipeline() {
 	projectName = "fbk-discord"
 	envFile = "FBK_ENV"
 	appPort = "235"
+	networkName = "fubuki"
 }
