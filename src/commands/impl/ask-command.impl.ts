@@ -47,8 +47,9 @@ export class AskCommand implements DiscordCommand {
           return Number(error.response?.status).toString().startsWith('5');
         },
       });
-      const answer = await axios.post(String(config.API_HOST + 'gemini/chat'), {
+      const answer = await axios.post(String(config.API_HOST + 'ollama/chat'), {
         text: question,
+        model: 'llama3.2:latest',
       });
       await interaction.editReply(answer.data.data.response);
     } catch (e) {

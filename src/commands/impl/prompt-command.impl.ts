@@ -46,9 +46,10 @@ export class PromptCommand implements DiscordCommand {
         },
       });
       const answer = await axios.post(
-        String(config.API_HOST + 'gemini/prompt-text'),
+        String(config.API_HOST + 'ollama/prompt-text'),
         {
           text: question,
+          model: 'llama3.2:latest',
         },
       );
       await interaction.editReply(answer.data.data.response);

@@ -1,4 +1,4 @@
-import { Events, Message } from 'discord.js';
+import { Events, Message, TextChannel } from 'discord.js';
 import { config } from '../../config';
 import helper from '../../util/helper';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import { DiscordEvent } from '../discord-event';
 export class MessageCreateEvent implements DiscordEvent {
   public name: string;
   private self: MessageCreateEvent | undefined;
+  private isTyping: boolean = false;
 
   constructor() {
     this.name = Events.MessageCreate;
@@ -29,6 +30,9 @@ export class MessageCreateEvent implements DiscordEvent {
       return;
     let q = interaction.content?.replace('beb, ', '');
     q = q.replace(/<[^>]*>/g, '');
+    let channel = interaction.channel as TextChannel;
+    this.isTyping = true;
+    this.typing(channel);
 
     try {
       axiosRetry(axios, {
@@ -41,13 +45,23 @@ export class MessageCreateEvent implements DiscordEvent {
           return Number(error.response?.status).toString().startsWith('5');
         },
       });
-      const answer = await axios.post(String(config.API_HOST + 'gemini/chat'), {
+      const answer = await axios.post(String(config.API_HOST + 'ollama/chat'), {
         text: q,
+        model: 'llama3.2:latest',
       });
+      this.isTyping = false;
       await interaction.reply(answer.data.data.response);
     } catch (e) {
       console.error(`Error when executing axios : ${e}`);
+      this.isTyping = false;
       await interaction.react('😵');
+    }
+  }
+
+  private async typing(channel: TextChannel) {
+    while (this.isTyping) {
+      await channel.sendTyping();
+      await new Promise((resolve) => setTimeout(resolve, 10000));
     }
   }
 }

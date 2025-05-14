@@ -34,7 +34,7 @@ export class ResetCommand implements DiscordCommand {
           return Number(error.response?.status).toString().startsWith('5');
         },
       });
-      await axios.get(String(config.API_HOST + 'gemini/reset'));
+      await axios.get(String(config.API_HOST + 'ollama/reset'));
       await interaction.editReply('Done reset chat session');
     } catch (e) {
       console.error(e);

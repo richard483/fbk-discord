@@ -1,7 +1,5 @@
 FROM node:20-alpine
 
-LABEL authors="Richard William"
-
 WORKDIR /app
 
 COPY package*.json ./
