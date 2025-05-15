@@ -3,7 +3,7 @@ import {
   SlashCommandBuilder,
   SlashCommandOptionsOnlyBuilder,
 } from 'discord.js';
-import { DiscordCommand } from '../DiscordCommand.interface';
+import { DiscordCommand } from '../discord-command';
 
 export class PingCommand implements DiscordCommand {
   public data: SlashCommandOptionsOnlyBuilder;

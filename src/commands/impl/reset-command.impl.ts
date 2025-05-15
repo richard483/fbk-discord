@@ -2,7 +2,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import axios from 'axios';
 import { config } from '../../config';
 import axiosRetry from 'axios-retry';
-import { DiscordCommand } from '../DiscordCommand.interface';
+import { DiscordCommand } from '../discord-command';
 
 export class ResetCommand implements DiscordCommand {
   public data: SlashCommandBuilder;
@@ -28,7 +28,7 @@ export class ResetCommand implements DiscordCommand {
         retries: Number(config.NUMBER_OF_API_RETRY),
         retryDelay: (count) => {
           console.log('[RETRY API CALL] Retry attempt: ', count);
-          return count * Number(config.TIME_TO_REPLY);
+          return count * Number(config.TIME_TO_RETRY);
         },
         retryCondition: (error) => {
           return Number(error.response?.status).toString().startsWith('5');

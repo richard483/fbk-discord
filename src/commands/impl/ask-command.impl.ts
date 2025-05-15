@@ -6,16 +6,18 @@ import {
 import axios from 'axios';
 import { config } from '../../config';
 import axiosRetry from 'axios-retry';
-import { DiscordCommand } from '../DiscordCommand.interface';
+import { DiscordCommand } from '../discord-command';
 
-export class PromptCommand implements DiscordCommand {
+export class AskCommand implements DiscordCommand {
   public data: SlashCommandOptionsOnlyBuilder;
-  private self: PromptCommand | undefined;
+  private self: DiscordCommand | undefined;
 
   constructor() {
     this.data = new SlashCommandBuilder()
-      .setName('prompt')
-      .setDescription('Replies your question with GeminiPro basic model')
+      .setName('ask')
+      .setDescription(
+        'Replies your question with Shirakami Fubuki Personality!',
+      )
       .addStringOption((option) => {
         return option
           .setName('question')
@@ -26,7 +28,7 @@ export class PromptCommand implements DiscordCommand {
 
   public getInstance(): DiscordCommand {
     if (!this.self) {
-      this.self = new PromptCommand();
+      this.self = new AskCommand();
     }
     return this.self;
   }
@@ -39,18 +41,15 @@ export class PromptCommand implements DiscordCommand {
         retries: Number(config.NUMBER_OF_API_RETRY),
         retryDelay: (count) => {
           console.log('[RETRY API CALL] Retry attempt: ', count);
-          return count * Number(config.TIME_TO_REPLY);
+          return count * Number(config.TIME_TO_RETRY);
         },
         retryCondition: (error) => {
           return Number(error.response?.status).toString().startsWith('5');
         },
       });
-      const answer = await axios.post(
-        String(config.API_HOST + 'gemini/prompt-text'),
-        {
-          text: question,
-        },
-      );
+      const answer = await axios.post(String(config.API_HOST + 'gemini/chat'), {
+        text: question,
+      });
       await interaction.editReply(answer.data.data.response);
     } catch (e) {
       console.error(e);

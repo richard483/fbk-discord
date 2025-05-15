@@ -3,7 +3,7 @@ import { config } from '../../config';
 import helper from '../../util/helper';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import { DiscordEvent } from '../DiscordEvent.interface';
+import { DiscordEvent } from '../discord-event';
 
 export class MessageCreateEvent implements DiscordEvent {
   public name: string;
@@ -35,7 +35,7 @@ export class MessageCreateEvent implements DiscordEvent {
         retries: Number(config.NUMBER_OF_API_RETRY),
         retryDelay: (count) => {
           console.log('[RETRY API CALL] Retry attempt: ', count);
-          return count * Number(config.TIME_TO_REPLY);
+          return count * Number(config.TIME_TO_RETRY);
         },
         retryCondition: (error) => {
           return Number(error.response?.status).toString().startsWith('5');

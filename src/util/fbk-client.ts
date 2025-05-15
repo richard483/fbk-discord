@@ -1,7 +1,7 @@
 import { Client, ClientOptions, Collection } from 'discord.js';
 import discordCommands from '../commands';
 import discordEvent from '../events';
-import { DiscordCommand } from '../commands/DiscordCommand.interface';
+import { DiscordCommand } from '../commands/discord-command';
 
 export default class FbkClient extends Client {
   commands: Collection<string, DiscordCommand>;
