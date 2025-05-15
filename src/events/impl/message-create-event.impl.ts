@@ -45,10 +45,13 @@ export class MessageCreateEvent implements DiscordEvent {
           return Number(error.response?.status).toString().startsWith('5');
         },
       });
-      const answer = await axios.post(String(config.API_HOST + 'ollama/chat'), {
-        text: q,
-        model: 'llama3.2:latest',
-      });
+      const answer = await axios.post(
+        String(config.API_HOST + config.DISCORD_LLM_PROVIDER + '/chat'),
+        {
+          text: q,
+          model: 'llama3.2:latest',
+        },
+      );
       this.isTyping = false;
       await interaction.reply(answer.data.data.response);
     } catch (e) {
