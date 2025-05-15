@@ -53,7 +53,9 @@ export class MessageCreateEvent implements DiscordEvent {
         },
       );
       this.isTyping = false;
-      await interaction.reply(answer.data.data.response);
+      this.sanitizeLLMOutput(answer.data.data.response).forEach(async (str) => {
+        await interaction.reply(str);
+      });
     } catch (e) {
       console.error(`Error when executing axios : ${e}`);
       this.isTyping = false;
@@ -66,5 +68,17 @@ export class MessageCreateEvent implements DiscordEvent {
       await channel.sendTyping();
       await new Promise((resolve) => setTimeout(resolve, 10000));
     }
+  }
+
+  private sanitizeLLMOutput(answer: string): string[] {
+    let sanitizeOutput = [];
+    let tempString = answer;
+    while (tempString.length > 2000) {
+      sanitizeOutput.push(tempString.substring(0, 1999) + '-');
+      tempString = tempString.substring(1999, tempString.length - 1);
+    }
+
+    sanitizeOutput.push(tempString);
+    return sanitizeOutput;
   }
 }
