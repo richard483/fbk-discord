@@ -30,7 +30,7 @@ export class MessageCreateEvent implements DiscordEvent {
       return;
     let q = interaction.content?.replace('beb, ', '');
     q = q.replace(/<[^>]*>/g, '');
-    let channel = interaction.channel as TextChannel;
+    const channel = interaction.channel as TextChannel;
     this.isTyping = true;
     this.typing(channel);
 
@@ -49,7 +49,7 @@ export class MessageCreateEvent implements DiscordEvent {
         String(config.API_HOST + config.DISCORD_LLM_PROVIDER + '/chat'),
         {
           text: q,
-          model: 'llama3.2:latest',
+          model: config.DISCORD_LLM_MODEL,
         },
       );
       this.isTyping = false;
@@ -71,7 +71,7 @@ export class MessageCreateEvent implements DiscordEvent {
   }
 
   private sanitizeLLMOutput(answer: string): string[] {
-    let sanitizeOutput = [];
+    const sanitizeOutput = [];
     let tempString = answer;
     while (tempString.length > 2000) {
       sanitizeOutput.push(tempString.substring(0, 1999) + '-');

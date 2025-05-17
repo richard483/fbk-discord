@@ -51,7 +51,7 @@ export class PromptCommand implements DiscordCommand {
         String(config.API_HOST + config.DISCORD_LLM_PROVIDER + '/prompt-text'),
         {
           text: question,
-          model: 'llama3.2:latest',
+          model: config.DISCORD_LLM_MODEL,
         },
       );
       await interaction.editReply(answer.data.data.response);

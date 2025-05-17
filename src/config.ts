@@ -11,9 +11,10 @@ const {
   TIME_TO_RETRY,
   PORT,
   LLM_PROVIDER,
+  LLM_MODEL
 } = process.env;
 
-let DISCORD_LLM_PROVIDER;
+let DISCORD_LLM_PROVIDER, DISCORD_LLM_MODEL;
 
 if (
   !DISCORD_TOKEN ||
@@ -36,6 +37,15 @@ if (!LLM_PROVIDER) {
   DISCORD_LLM_PROVIDER = LLM_PROVIDER;
 }
 
+if (!LLM_MODEL) {
+  console.warn(
+    'LLM_MODEL is not set. Defaulting to "llama3.2:latest". This may cause issues if you are using a different provider.',
+  );
+  DISCORD_LLM_MODEL = 'llama3.2:latest';
+} else {
+  DISCORD_LLM_MODEL = LLM_MODEL;
+}
+
 export const config = {
   DISCORD_TOKEN,
   DISCORD_CLIENT_ID,
@@ -46,4 +56,5 @@ export const config = {
   PORT,
   LLM_PROVIDER,
   DISCORD_LLM_PROVIDER,
+  DISCORD_LLM_MODEL
 };
