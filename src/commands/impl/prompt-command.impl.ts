@@ -15,7 +15,9 @@ export class PromptCommand implements DiscordCommand {
   constructor() {
     this.data = new SlashCommandBuilder()
       .setName('prompt')
-      .setDescription('Replies your question with GeminiPro basic model')
+      .setDescription(
+        'Generate a prompt result from the question using preconfigured model',
+      )
       .addStringOption((option) => {
         return option
           .setName('question')
@@ -46,9 +48,10 @@ export class PromptCommand implements DiscordCommand {
         },
       });
       const answer = await axios.post(
-        String(config.API_HOST + 'gemini/prompt-text'),
+        String(config.API_HOST + config.DISCORD_LLM_PROVIDER + '/prompt-text'),
         {
           text: question,
+          model: 'llama3.2:latest',
         },
       );
       await interaction.editReply(answer.data.data.response);
