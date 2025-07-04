@@ -9,6 +9,7 @@ export class MessageCreateEvent implements DiscordEvent {
   public name: string;
   private self: MessageCreateEvent | undefined;
   private isTyping: boolean = false;
+  private maxLength = 2000;
 
   constructor() {
     this.name = Events.MessageCreate;
@@ -53,8 +54,14 @@ export class MessageCreateEvent implements DiscordEvent {
         },
       );
       this.isTyping = false;
-      this.sanitizeLLMOutput(answer.data.data.response).forEach(async (str) => {
-        await interaction.reply(str);
+      let isFirstInteraction = true;
+      this.finalizeLLMOutput(answer.data.data.response).forEach(async (str) => {
+        if (isFirstInteraction) {
+          isFirstInteraction = false;
+          await interaction.reply(str);
+        } else {
+          await interaction.channel.send(str);
+        }
       });
     } catch (e) {
       console.error(`Error when executing axios : ${e}`);
@@ -70,15 +77,37 @@ export class MessageCreateEvent implements DiscordEvent {
     }
   }
 
-  private sanitizeLLMOutput(answer: string): string[] {
-    let sanitizeOutput = [];
+  private finalizeLLMOutput(answer: string): string[] {
+    const outputChunks: string[] = [];
     let tempString = answer;
-    while (tempString.length > 2000) {
-      sanitizeOutput.push(tempString.substring(0, 1999) + '-');
-      tempString = tempString.substring(1999, tempString.length - 1);
+    while (tempString.length > this.maxLength) {
+      let splitIndex = this.maxLength;
+      const enterCheck = tempString.lastIndexOf("\n\n", this.maxLength);
+      let isEnterSplitted = false;
+
+      if (enterCheck != -1) {
+        splitIndex = enterCheck;
+        isEnterSplitted = true;
+      } else {
+        const fullStopCheck = tempString.lastIndexOf(". ", this.maxLength);
+        if (fullStopCheck != -1) {
+          splitIndex = fullStopCheck;
+        }
+      }
+
+      const outputChunk = tempString.slice(0, splitIndex + 1).trim();
+      outputChunks.push(outputChunk);
+      if (isEnterSplitted) {
+        tempString = "_ _\n" + tempString.slice(splitIndex + 1).trim();
+      } else {
+        tempString = tempString.slice(splitIndex + 1).trim();
+      }
     }
 
-    sanitizeOutput.push(tempString);
-    return sanitizeOutput;
+    if (tempString.length > 0) {
+      outputChunks.push(tempString);
+    }
+    return outputChunks;
   }
+
 }
