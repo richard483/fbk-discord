@@ -54,15 +54,26 @@ export class MessageCreateEvent implements DiscordEvent {
         },
       );
       this.isTyping = false;
-      let isFirstInteraction = true;
-      this.finalizeLLMOutput(answer.data.data.response).forEach(async (str) => {
-        if (isFirstInteraction) {
-          isFirstInteraction = false;
-          await interaction.reply(str);
+
+      const chunks = this.finalizeLLMOutput(answer.data.data.response);
+      console.log(chunks.length);
+      for (let i = 0; i < chunks.length; i++) {
+        if (i === 0) {
+          await interaction.reply(chunks[i]);
         } else {
-          await interaction.channel.send(str);
+          await interaction.channel.send(chunks[i]);
         }
-      });
+      }
+
+      // let isFirstInteraction = true;
+      // this.finalizeLLMOutput(answer.data.data.response).forEach(async (str) => {
+      //   if (isFirstInteraction) {
+      //     isFirstInteraction = false;
+      //     await interaction.reply(str);
+      //   } else {
+      //     await interaction.channel.send(str);
+      //   }
+      // });
     } catch (e) {
       console.error(`Error when executing axios : ${e}`);
       this.isTyping = false;
