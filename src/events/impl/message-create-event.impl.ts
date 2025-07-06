@@ -54,9 +54,7 @@ export class MessageCreateEvent implements DiscordEvent {
         },
       );
       this.isTyping = false;
-
       const chunks = this.finalizeLLMOutput(answer.data.data.response);
-      console.log(chunks.length);
       for (let i = 0; i < chunks.length; i++) {
         if (i === 0) {
           await interaction.reply(chunks[i]);
@@ -65,15 +63,6 @@ export class MessageCreateEvent implements DiscordEvent {
         }
       }
 
-      // let isFirstInteraction = true;
-      // this.finalizeLLMOutput(answer.data.data.response).forEach(async (str) => {
-      //   if (isFirstInteraction) {
-      //     isFirstInteraction = false;
-      //     await interaction.reply(str);
-      //   } else {
-      //     await interaction.channel.send(str);
-      //   }
-      // });
     } catch (e) {
       console.error(`Error when executing axios : ${e}`);
       this.isTyping = false;
@@ -91,24 +80,28 @@ export class MessageCreateEvent implements DiscordEvent {
   private finalizeLLMOutput(answer: string): string[] {
     const outputChunks: string[] = [];
     let tempString = answer;
+
     while (tempString.length > this.maxLength) {
       let splitIndex = this.maxLength;
       const enterCheck = tempString.lastIndexOf("\n\n", this.maxLength);
-      let isEnterSplitted = false;
 
       if (enterCheck != -1) {
         splitIndex = enterCheck;
-        isEnterSplitted = true;
       } else {
         const fullStopCheck = tempString.lastIndexOf(". ", this.maxLength);
         if (fullStopCheck != -1) {
           splitIndex = fullStopCheck;
+        } else {
+          const spaceCheck = tempString.lastIndexOf(" ", this.maxLength);
+          if (spaceCheck != -1) {
+            splitIndex = spaceCheck;
+          }
         }
       }
 
       const outputChunk = tempString.slice(0, splitIndex + 1).trim();
       outputChunks.push(outputChunk);
-      if (isEnterSplitted) {
+      if (enterCheck != -1) {
         tempString = "_ _\n" + tempString.slice(splitIndex + 1).trim();
       } else {
         tempString = tempString.slice(splitIndex + 1).trim();
