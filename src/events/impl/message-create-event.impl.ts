@@ -31,6 +31,13 @@ export class MessageCreateEvent implements DiscordEvent {
       return;
     let q = interaction.content?.replace('beb, ', '');
     q = q.replace(/<[^>]*>/g, '');
+    if (interaction.channel?.isTextBased() === false) {
+      console.log(
+        '[MessageCreateEvent] - #execute - This is not a text channel.',
+      );
+
+      return;
+    }
     const channel = interaction.channel as TextChannel;
     this.isTyping = true;
     this.typing(channel);
