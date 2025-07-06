@@ -31,7 +31,14 @@ export class MessageCreateEvent implements DiscordEvent {
       return;
     let q = interaction.content?.replace('beb, ', '');
     q = q.replace(/<[^>]*>/g, '');
-    let channel = interaction.channel as TextChannel;
+    if (interaction.channel?.isTextBased() === false) {
+      console.log(
+        '[MessageCreateEvent] - #execute - This is not a text channel.',
+      );
+
+      return;
+    }
+    const channel = interaction.channel as TextChannel;
     this.isTyping = true;
     this.typing(channel);
 
@@ -59,10 +66,9 @@ export class MessageCreateEvent implements DiscordEvent {
         if (i === 0) {
           await interaction.reply(chunks[i]);
         } else {
-          await interaction.channel.send(chunks[i]);
+          await (interaction.channel as TextChannel).send(chunks[i]);
         }
       }
-
     } catch (e) {
       console.error(`Error when executing axios : ${e}`);
       this.isTyping = false;
@@ -83,16 +89,16 @@ export class MessageCreateEvent implements DiscordEvent {
 
     while (tempString.length > this.maxLength) {
       let splitIndex = this.maxLength;
-      const enterCheck = tempString.lastIndexOf("\n\n", this.maxLength);
+      const enterCheck = tempString.lastIndexOf('\n\n', this.maxLength);
 
       if (enterCheck != -1) {
         splitIndex = enterCheck;
       } else {
-        const fullStopCheck = tempString.lastIndexOf(". ", this.maxLength);
+        const fullStopCheck = tempString.lastIndexOf('. ', this.maxLength);
         if (fullStopCheck != -1) {
           splitIndex = fullStopCheck;
         } else {
-          const spaceCheck = tempString.lastIndexOf(" ", this.maxLength);
+          const spaceCheck = tempString.lastIndexOf(' ', this.maxLength);
           if (spaceCheck != -1) {
             splitIndex = spaceCheck;
           }
@@ -102,7 +108,7 @@ export class MessageCreateEvent implements DiscordEvent {
       const outputChunk = tempString.slice(0, splitIndex + 1).trim();
       outputChunks.push(outputChunk);
       if (enterCheck != -1) {
-        tempString = "_ _\n" + tempString.slice(splitIndex + 1).trim();
+        tempString = '_ _\n' + tempString.slice(splitIndex + 1).trim();
       } else {
         tempString = tempString.slice(splitIndex + 1).trim();
       }
@@ -113,5 +119,4 @@ export class MessageCreateEvent implements DiscordEvent {
     }
     return outputChunks;
   }
-
 }
